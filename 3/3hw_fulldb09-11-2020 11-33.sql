@@ -4,8 +4,8 @@
 # TABLE STRUCTURE FOR: users
 #
 
-INSERT INTO users (id, firstname, lastname, email, phone, birtday, hometown, gender, photo_id, created_at, pass) VALUES ('1', 'Alivia', 'Watsica', 'andres.toy@example.org', '136.918.1622', '2007-04-19', 'Stoltenberghaven', 'f', '608653', '2013-03-05 20:59:38', '68a94e26c5e54a98272e352347bab2');
-INSERT INTO users (id, firstname, lastname, email, phone, birtday, hometown, gender, photo_id, created_at, pass) VALUES ('2', 'Grayce', 'Rowe', 'lmaggio@example.net', '1-566-277-0446x89252', '1993-08-01', 'North Clifford', 'f', '835950', '1936-12-27 15:22:34', '372ad40788630bd761ebe76d88fd6d');
+INSERT INTO users (id, firstname, lastname, email, phone, birthday, hometown, gender, photo_id, created_at, pass) VALUES ('1', 'Alivia', 'Watsica', 'andres.toy@example.org', '136.918.1622', '2007-04-19', 'Stoltenberghaven', 'f', '608653', '2013-03-05 20:59:38', '68a94e26c5e54a98272e352347bab2');
+INSERT INTO users (id, firstname, lastname, email, phone, birthday, hometown, gender, photo_id, created_at, pass) VALUES ('2', 'Grayce', 'Rowe', 'lmaggio@example.net', '1-566-277-0446x89252', '1993-08-01', 'North Clifford', 'f', '835950', '1936-12-27 15:22:34', '372ad40788630bd761ebe76d88fd6d');
 INSERT INTO users (id, firstname, lastname, email, phone, birtday, hometown, gender, photo_id, created_at, pass) VALUES ('3', 'Brody', 'Koss', 'cummings.gladyce@example.com', '(277)608-2307', '1984-09-25', 'Kattieland', 'f', '137980', '1983-05-31 02:14:42', '06dd0faaa4de7e3a6359adea41d1f8');
 INSERT INTO users (id, firstname, lastname, email, phone, birtday, hometown, gender, photo_id, created_at, pass) VALUES ('4', 'Dalton', 'Price', 'fhermann@example.org', '686.592.8791x27761', '1987-02-18', 'Kiehnview', 'f', '833525', '2005-06-06 21:23:03', '53c8be600cd6b3d7614516774663f3');
 INSERT INTO users (id, firstname, lastname, email, phone, birtday, hometown, gender, photo_id, created_at, pass) VALUES ('5', 'Friedrich', 'Dietrich', 'dashawn69@example.org', '1-318-045-1726x2142', '2000-01-11', 'Lake Filiberto', 'm', '558360', '2019-02-04 06:37:35', '0b3926999ddbf674aea681d310b2bd');
