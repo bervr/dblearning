@@ -2,8 +2,8 @@ drop database if exists ivi;
 create database ivi;
 use ivi;
 
--- 1
-drop table if exists accounts; -- основные настройки аккаунта
+
+drop table if exists accounts;
 create table accounts(
 	id serial primary key,
 	nikname varchar(50) unique,
@@ -19,9 +19,10 @@ create table accounts(
 	subscription bool,
 	subscription_before datetime,
 	pass char(30)
-);
--- 2 
-drop table if exists notification; -- настройки уведомлений
+) comment 'Основные настройки аккаунта';
+
+
+drop table if exists notification; 
 create table notification(
 account_id bigint unsigned,
 send_adw_sms  bool default 0,
@@ -37,11 +38,11 @@ send_account_sms  bool default 1,
 send_account_email  bool default 1,
 send_account_push  bool default 0,
 foreign key (account_id) references accounts(id)
-);
--- 3
-drop table if exists users; /* по сути профили. У аккаунта может быть больше одного пользователя с разными настройками просмотра, историей и рекомендациями, 
-например основной  и детский. Или руский и английский*/
-create table users(
+) comment 'Настройки уведомлений';
+
+
+drop table if exists profiles; 
+create table profiles(
 	id serial primary key,
 	account_id bigint unsigned,
 	name varchar(50),
@@ -49,40 +50,44 @@ create table users(
 	photo_id bigint unsigned,
 	is_active bool default 1,
 	language_set enum('ru', 'en'),
-	adult_restriction enum ('allowed','denied')
+	adult_restriction enum ('allowed','denied'),
 	foreign key (account_id) references accounts(id)
-);
--- 4
-drop table if exists movie_categories; -- категории, у фильма может быть больше одной категории
+)comment 'Профили аккаунта'; /* по сути  у аккаунта может быть больше одного пользователя с разными настройками просмотра, историей и рекомендациями, 
+например основной  и детский. Или руский и английский*/
+
+
+drop table if exists movie_categories; 
 create table movie_categories( 
 id serial primary key,
 category varchar(50)
-);
--- 5
-drop table if exists movie_genre; -- жанры, у фильма может быть больше одного жанра
+)comment 'Категории, у фильма может быть больше одной категории';
+
+
+drop table if exists movie_genre; 
 create table movie_genre( 
 id serial primary key,
 genre varchar(50)
-);
+)comment 'Жанры, у фильма может быть больше одного жанра';
 
--- 6
-drop table if exists movies; -- фильмы
+
+drop table if exists movies;
 create table movies( 
 id serial primary key,
 name varchar(255),
 original_name varchar(255),
 year_of year,
 country varchar(20),
-duration INT,
+duration time comment 'длительность',
 description text,
 poster_id bigint unsigned,
 genre bigint unsigned,
 movie_category bigint unsigned,
 foreign key (genre) references movie_genre(id),
 foreign key (movie_category) references movie_categories(id)
-);
--- 7
-drop table if exists actors; -- актеры 
+)comment 'Фильмы';
+
+
+drop table if exists actors;
 create table  actors(
 id serial primary key,
 name varchar(255),
@@ -90,18 +95,19 @@ original_name varchar(255),
 photo_id bigint unsigned,
 description text,
 biography text
-);
--- 8
-drop table if exists casting; -- актеры в ролях фильмов и фильмы с участием актера
+)comment 'Актеры ';
+
+
+drop table if exists casting; 
 create table  casting(
 actor_id bigint unsigned,
 movie_id bigint unsigned,
 foreign key (actor_id) references actors(id),
 foreign key (movie_id) references movies(id)
-);
+)comment 'Актеры в ролях фильмов и фильмы с участием актера';
  
--- 9 
-drop table if exists purchases; -- оплаченные фильмы  аккаунта
+
+drop table if exists purchases;
 create table  purchases(
 account_id bigint unsigned,
 movie_id bigint unsigned,
@@ -110,11 +116,25 @@ purchase_type enum('temporary', 'permanent'),
 timebond datetime,
 foreign key (account_id) references accounts(id),
 foreign key (movie_id) references movies(id)
-);
+)comment 'Оплаченные фильмы  аккаунта';
 
--- 10
--- tv
--- views history
--- serials
--- view_later
 
+drop table if exists views_history;
+create table  views_history( 
+profile_id bigint unsigned,
+movie_id bigint unsigned,
+timeline time default 0,
+viewed_at datetime default current_timestamp,
+foreign key (profile_id) references profiles(id),
+foreign key (movie_id) references movies(id)
+) COMMENT = 'история просмотров'; 
+
+
+drop table if exists wanted_to_view;
+create table  wanted_to_view ( 
+profile_id bigint unsigned,
+movie_id bigint unsigned,
+check_up datetime default current_timestamp on update current_timestamp,
+foreign key (profile_id) references profiles(id),
+foreign key (movie_id) references movies(id)
+)COMMENT = 'фильмы отмеченые чтобы смотреть позже'; 
