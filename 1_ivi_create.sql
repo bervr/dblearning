@@ -20,7 +20,10 @@ create table accounts(
 	subscription_before datetime,
 	pass char(30)
 ) comment 'Основные настройки аккаунта';
-
+create index indx_accounts_name ON accounts (firstname);
+create index indx_accounts_email ON accounts (email);
+create index indx_accounts_phone ON accounts (phone(6) );
+create index indx_accounts_nikname ON accounts (nikname);
 
 drop table if exists notification; 
 create table notification(
@@ -39,6 +42,7 @@ send_account_email  bool default 1,
 send_account_push  bool default 0,
 foreign key (account_id) references accounts(id)
 ) comment 'Настройки уведомлений';
+create index indx_notification ON notification (account_id);
 
 
 drop table if exists profiles; 
@@ -49,22 +53,16 @@ create table profiles(
 	created_at datetime default now(),
 	photo_id bigint unsigned,
 	is_active bool default 1,
-	language_set enum('ru', 'en'),
+	language_set enum('ru', 'en') default 'ru',
 	adult_restriction enum ('allowed','denied'),
 	foreign key (account_id) references accounts(id)
 )comment 'Профили аккаунта'; /* по сути  у аккаунта может быть больше одного пользователя с разными настройками просмотра, историей и рекомендациями, 
 например основной  и детский. Или руский и английский*/
+create index indx_profiles_name ON profiles (name);
+create index indx_profiles_id ON profiles (account_id);
 
-
-drop table if exists movie_categories; 
-create table movie_categories( 
-id serial primary key,
-category varchar(50)
-)comment 'Категории, у фильма может быть больше одной категории';
-
-
-drop table if exists movie_genre; 
-create table movie_genre( 
+drop table if exists genres; 
+create table genres( 
 id serial primary key,
 genre varchar(50)
 )comment 'Жанры, у фильма может быть больше одного жанра';
@@ -79,33 +77,45 @@ year_of year,
 country varchar(20),
 duration time comment 'длительность',
 description text,
-poster_id bigint unsigned,
-genre bigint unsigned,
-movie_category bigint unsigned,
-foreign key (genre) references movie_genre(id),
-foreign key (movie_category) references movie_categories(id)
+poster_id bigint unsigned
 )comment 'Фильмы';
+create index indx_movies_name  ON movies(name);
+create index indx_movies_name_orig  ON movies(original_name);
 
 
-drop table if exists actors;
-create table  actors(
+
+drop table if exists movie_genre;
+create table movie_genre( 
+id serial primary key,
+movie_id bigint unsigned,
+foreign key (id) references genres(id),
+foreign key (movie_id) references movies(id)
+)comment 'жанры и фильмы';
+create index indx_movie_genre_name  ON movie_genre(movie_id);
+
+drop table if exists persons;
+create table  persons(
 id serial primary key,
 name varchar(255),
 original_name varchar(255),
 photo_id bigint unsigned,
 description text,
-biography text
-)comment 'Актеры ';
+biography text,
+status tinytext
+)comment 'Актеры и создатели ';
+-- drop index  indx_persons_name ON persons;
+create index indx_persons_name ON persons (name);
 
 
 drop table if exists casting; 
 create table  casting(
-actor_id bigint unsigned,
+person_id bigint unsigned,
 movie_id bigint unsigned,
-foreign key (actor_id) references actors(id),
+foreign key (person_id) references persons(id),
 foreign key (movie_id) references movies(id)
 )comment 'Актеры в ролях фильмов и фильмы с участием актера';
- 
+create index indx_casting_person ON casting (person_id);
+create index indx_casting_movie ON casting (movie_id);
 
 drop table if exists purchases;
 create table  purchases(
@@ -138,3 +148,8 @@ check_up datetime default current_timestamp on update current_timestamp,
 foreign key (profile_id) references profiles(id),
 foreign key (movie_id) references movies(id)
 )COMMENT = 'фильмы отмеченые чтобы смотреть позже'; 
+
+drop table if exists rating;
+create table  rating ( 
+
+)COMMENT = 'оценки пользователей для фильмов'; 
