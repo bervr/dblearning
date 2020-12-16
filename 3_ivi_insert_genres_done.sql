@@ -1,4 +1,5 @@
- INSERT INTO genres (genre) VALUES ("");
+use ivi; 
+INSERT INTO genres (genre) VALUES ("");
  INSERT INTO genres (genre) VALUES ("фантастика");
  INSERT INTO genres (genre) VALUES ("мюзикл");
  INSERT INTO genres (genre) VALUES ("военный");

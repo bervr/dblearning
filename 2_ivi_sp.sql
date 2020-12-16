@@ -1,5 +1,8 @@
-use ivi;
 
+
+use ivi;
+-- функция заполнения фото id если его нет  равным id пользователя
+-- написать
 drop trigger if exists create_first_profile;
 drop trigger if exists create_nikname;
 delimiter //
@@ -14,10 +17,11 @@ end //
 create trigger create_nikname before insert on accounts
 for each row
 begin
+	if new.photo_id is null then 
+		SET new.photo_id = new.id;
+	end if;
 	if new.nikname is null then 
 		SET new.nikname = new.email;
 	end if;
 end //
 delimiter ;
-
-

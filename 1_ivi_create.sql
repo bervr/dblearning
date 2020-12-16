@@ -10,15 +10,15 @@ create table accounts(
 	firstname varchar(50),
 	lastname varchar(50) comment 'Фамилия пользователя',
 	email varchar(120) unique,
-	email_confirmed bool,
+	email_confirmed bool default 0,
 	phone varchar(20) unique,
-	phone_confirmed bool,
-	birtday date,
+	phone_confirmed bool default 0,
+	birthday date,
 	photo_id bigint unsigned,
 	created_at datetime default now(),
 	subscription bool,
 	subscription_before datetime,
-	pass char(30)
+	pass char(45)
 ) comment 'Основные настройки аккаунта';
 create index indx_accounts_name ON accounts (firstname);
 create index indx_accounts_email ON accounts (email);
@@ -86,7 +86,7 @@ create index indx_movies_name_orig  ON movies(original_name);
 
 drop table if exists movie_genre;
 create table movie_genre( 
-id serial primary key,
+id bigint unsigned,
 movie_id bigint unsigned,
 foreign key (id) references genres(id),
 foreign key (movie_id) references movies(id)
@@ -151,5 +151,14 @@ foreign key (movie_id) references movies(id)
 
 drop table if exists rating;
 create table  rating ( 
-
+id serial primary key,
+movie_id bigint unsigned,
+profile_id bigint unsigned,
+rated_at datetime default current_timestamp on update current_timestamp,
+rate tinyint,
+foreign key (profile_id) references profiles(id),
+foreign key (movie_id) references movies(id)
 )COMMENT = 'оценки пользователей для фильмов'; 
+create index indx_rating_rate ON rating (rate);
+create index indx_rating_movie ON rating (movie_id);
+
