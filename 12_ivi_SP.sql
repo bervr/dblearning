@@ -54,5 +54,5 @@ create PROCEDURE get_whats_to_view(profile_id int)
 delimiter ;
 
 
-call get_whats_to_view(5);
+call get_whats_to_view(1);
 

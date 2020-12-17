@@ -33,6 +33,4 @@ join movies m on mg.movie_id= m.id
 join genres g on g.id = mg.id 
 group by mg.movie_id order by mg.id;
 
-drop view if exists rated_in_genre;
-CREATE VIEW rated_in_genre AS 
 
